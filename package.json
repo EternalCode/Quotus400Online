@@ -1,0 +1,21 @@
+{
+  "name": "website_init",
+  "version": "1.0.0",
+  "description": "My portfolio website",
+  "main": "index.js",
+  "scripts": {
+    "test": "running"
+  },
+  "keywords": [
+    "website",
+    "portfolio",
+    "Dilshan",
+    "gunasekera"
+  ],
+  "author": "Dilshan Gunasekera",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bower": "^1.8.0"
+  }
+}
