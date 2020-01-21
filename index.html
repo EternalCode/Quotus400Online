@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Quotus 400</title>
-    <meta name="description" content="Porfolio and work website!">
+    <meta name="description" content="webport">
     <meta name ="author" content="Dilshan Gunasekera">
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -15,6 +15,8 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="args_parse.js"></script>
     <script src="quota.js"></script>
+    <script src="quotaGroup.js"></script>
+    <script src="q_logic.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Harmattan" rel="stylesheet">
     <link href='font-awesome-4.7.0/css/font-awesome.min.css' rel='stylesheet'/>
 
@@ -28,6 +30,12 @@
       }
 
     </style>
+    <script>
+        $( document ).ready(function() {
+            document.getElementById("quotusInput").innerHTML = "";
+            document.getElementById("quotusInput").innerText = "";
+        });
+    </script>
   </head>
 
   <body>
@@ -105,21 +113,26 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="clientName" class="col-sm-2 col-form-label">Client name</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="clientName" placeholder="Client Name">
+        <div class="dropdown" align="left">
+            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Client name
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <button class="dropdown-item btn-secondary" type="button" onClick=SelectClient(0)>No Specification</button>
+                <button class="dropdown-item btn-secondary" type="button" onClick=SelectClient(1)>Tulchin</button>
             </div>
+        </div>
         </div>
         <div class="form-group row" align="left" margin:10px>
             <div class="col-sm-10">
-                <label class="form-check-label" for="enableSplitAB">Enable SplitAB quotas&nbsp;&nbsp;&nbsp; </label>
                 <input type="checkbox" class="form-check-input" id="enableSplitAB">
+                <label class="form-check-label" for="enableSplitAB">&nbsp;&nbsp;&nbsp;Enable SplitAB quotas&nbsp;&nbsp;&nbsp; </label>
             </div>
         </div>
         <div class="form-group row" align="left" margin:10px>
             <div class="col-sm-10">
-                <label class="form-check-label" for="TermWarn">Terminate with Warning&nbsp;&nbsp;&nbsp; </label>
                 <input type="checkbox" class="form-check-input" id="TermWarn">
+                <label class="form-check-label" for="TermWarn">&nbsp;&nbsp;&nbsp;Terminate with Warning&nbsp;&nbsp;&nbsp; </label>
             </div>
         </div>
     </form>
@@ -127,22 +140,6 @@
     <br>
     <br>
   </div>
-
-    <div style="height: 30px"></div>
-    <div class="container section-block">
-        <br>
-        <br>
-        <font class="section-heading">Quota Groups</font>
-        <hr class="subtle_section">
-        <br>
-        <div id="QuotaGrpBuffer">Requires Processing.</div>
-        <br>
-        <br>
-        <center>
-    <br>
-    <br>
-    </div>
-
     <div style="height: 30px"></div>
     <div class="container section-block">
         <br>
@@ -151,13 +148,12 @@
         <hr class="subtle_section">
         <br>
         <div id="WarningBuffer" align="left">Requires Processing.</div>
+        <div id="ButtonBuffer" align="left"></div>
         <br>
         <br>
-        <center>
     <br>
     <br>
     </div>
-
     <div style="height: 30px"></div>
     <div class="container section-block">
         <br>
