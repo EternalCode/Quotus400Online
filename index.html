@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css" href="main.css">
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="args_parse.js"></script>
+    <script src="quota.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Harmattan" rel="stylesheet">
     <link href='font-awesome-4.7.0/css/font-awesome.min.css' rel='stylesheet'/>
 
@@ -79,12 +81,49 @@
     <hr class="subtle_section">
     <br>
     <br>
-    <textarea id="quotusInput" rows = "20" cols = "80" name = "paste codesheet here">
-    Delete this message and paste the Codesheet here...
+    <label for="quotusInput">Quotus Input space</label>
+    <textarea class="form-control" id="quotusInput" rows="20" placeholder="Paste the Codesheet data here.">
     </textarea>
     <br>
-    <button class="btn btn-default btn-group-sm" onClick=ProcessInput()>Process</button>
-    <button class="btn btn-default btn-group-sm" onClick=Export()>Export</button>
+    <form>
+        <div class="form-group row">
+            <label for="EndSize" id="nSize" class="col-sm-2 col-form-label">End Size*</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="EndSize" value="0">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="TrimodeSizes" class="col-sm-2 col-form-label">Trimode Sizes</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="TrimodeSizes" placeholder="Phone-Email-Text">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="DualmodeSizes" class="col-sm-2 col-form-label">Dualmode Sizes</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="DualmodeSizes" placeholder="Phone-Email">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="clientName" class="col-sm-2 col-form-label">Client name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="clientName" placeholder="Client Name">
+            </div>
+        </div>
+        <div class="form-group row" align="left" margin:10px>
+            <div class="col-sm-10">
+                <label class="form-check-label" for="enableSplitAB">Enable SplitAB quotas&nbsp;&nbsp;&nbsp; </label>
+                <input type="checkbox" class="form-check-input" id="enableSplitAB">
+            </div>
+        </div>
+        <div class="form-group row" align="left" margin:10px>
+            <div class="col-sm-10">
+                <label class="form-check-label" for="TermWarn">Terminate with Warning&nbsp;&nbsp;&nbsp; </label>
+                <input type="checkbox" class="form-check-input" id="TermWarn">
+            </div>
+        </div>
+    </form>
+    <button class="btn btn-primary" onClick=ProcessInput()>Process</button>
     <br>
     <br>
   </div>
@@ -93,22 +132,25 @@
     <div class="container section-block">
         <br>
         <br>
-        <font class="section-heading">Latest Update</font>
+        <font class="section-heading">Quota Groups</font>
         <hr class="subtle_section">
-        <p>
         <br>
-        <script>
-        var dataObj;
-        $.getJSON('https://api.github.com/repos/EternalCode/Quotus400Online/branches/master', function(data) {
-            dataObj = data;
-            let person = dataObj.commit.commit.author.name;
-            let date = dataObj.commit.commit.author.date;
-            let message = dataObj.commit.commit.message;
-            let output = "By: " + person + "<br>&nbsp;&nbsp;&nbsp;&nbsp;" + date + "<br>&nbsp;&nbsp;&nbsp;&nbsp;" + message;
-            $("div#LatestCommit").replaceWith(output);
-        });
-        </script>
-        <div id="LatestCommit"></div>
+        <div id="QuotaGrpBuffer">Requires Processing.</div>
+        <br>
+        <br>
+        <center>
+    <br>
+    <br>
+    </div>
+
+    <div style="height: 30px"></div>
+    <div class="container section-block">
+        <br>
+        <br>
+        <font class="section-heading">Report</font>
+        <hr class="subtle_section">
+        <br>
+        <div id="WarningBuffer" align="left">Requires Processing.</div>
         <br>
         <br>
         <center>
@@ -143,13 +185,13 @@
     <br>
     </div>
     </body>
-
+<div style="height: 30px"></div>
   <footer>
     <div id="CR_text">
     <br>
     <br>
     <br>
-    This site and it's contents are copyright &copy; 2017 Dilshan Gunasekera. Maintained and written purely by Dilshan, unless otherwise mentioned.
+    This site and it's contents are without warrenty or guarentee of functionality.
     <br>
     <br>
     <br>
