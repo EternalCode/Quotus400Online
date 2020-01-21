@@ -1,14 +1,7 @@
-var NSIZE;
-var TRIMODE_SIZE;
-var DUALMODE_SIZE;
-var SPLITAB;
-var CLIENT;
-var WARNINGS = [];
-
-// Assumptions
-//
-// Phonetype: 1 = Landline, 2 = Cellphone
-// Mode: 1 = Phone, 2 = Email, 3 = Text
+/*
+ * Quota Class - Each single Quota is modeled by this class.
+ *
+ */
 
 function rd(x) {
     let val = x.toString().split(".")
@@ -21,7 +14,7 @@ function rd(x) {
 }
 
 class Quota {
-	constructor(prefix, quota_name, quota_limit, question_name, question_code, nsize, nsize_override, flex=0, tri=false, raw=false){
+	constructor(prefix, quota_name, quota_limit, question_name, question_code, nsize, nsize_override, is_dupe, flex=0, tri=false, raw=false){
 		this.name = quota_name;
 		this.limit = quota_limit;
 		this.question_name = question_name;
@@ -30,7 +23,7 @@ class Quota {
 		this.nsize_override = nsize_override;
 		this.prefix = prefix;
 		this.flex = flex;
-		this.isactive = True;
+		this.isactive = true;
 		this.tri = tri;
 		this.raw = raw;
 		this.counter_limit = 999;
@@ -43,6 +36,8 @@ class Quota {
 
 		if (this.flex > 0 && (this.max + this.delta) > 0)
 			this.fullname += " - Flex " + (this.flex).toString() + "% " + " +/-" + (this.delta).toString();
+		if (this.fullname.toLowerCase().includes("split"))
+			this.isactive = false;
 	}
 
 	validify() {
@@ -65,16 +60,17 @@ class Quota {
 			return;
 		if (this.limit == this.counter_limit)
 			return;
-		size = this.size;
+		let size = this.size;
 		if (nsize != undefined)
 			size = nsize;
 		this.limit = (size * (this.limit / 100));
 		this.max = this.limit;
 		// flex
-		if (this.flex > 0)
+		if (this.flex > 0) {
 			this.delta = rd((this.flex / 100) * size);
 			this.limit += this.delta;
 			this.fullname += " - Flex " + (this.flex).toString() + "% " + " +/-" + (this.delta).toString();
+		}
 		this.limit = rd(this.limit);
 		this.calculated = true;
 	}
@@ -96,9 +92,9 @@ class Quota {
 		let quota_settings_dnq_online = '"{""action"":""' + this.action + '"",""autoload_url"":""1"",""active"":""1"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Thank you for your time.""}]}"'
 		let quota_settings_reschedule = '"{""action"":""' + this.action + '"",""autoload_url"":""1"",""active"":""1"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Reschedule and end call.""}]}"'
 
-		if (nlow.lower().includes("reschedule")) {
+		if (nlow.toLowerCase().includes("reschedule")) {
 			data = (this.fullname + "," + simple + "," + this.question_name + "," + this.q_code + "," + this.limit + "," + quota_settings_reschedule);
-		} else if (this.fullname.lower().includes("dnq")) {
+		} else if (this.fullname.toLowerCase().includes("dnq")) {
 			if (nlow.includes("email") || nlow.includes("text") || nlow.includes("online")) {
 				data = (this.fullname + "," + simple + "," + this.question_name + "," + this.q_code + "," + this.limit + "," + quota_settings_dnq_online);
 			} else {
