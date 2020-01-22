@@ -59,9 +59,7 @@ function ProcessData() {
             // group name
             q_prefix = line;//line.split(" ")[0]
             QUOTA_GROUPS.push(new QuotaGroup(q_prefix, trisplit, gflex, is_raw, CLIENT, NSIZE, TRIMODE_SIZE, isdual));
-            if (SPLITAB == true) {
-                QUOTA_GROUPS[QUOTA_GROUPS.length-1].splitQuotas = isSplit;
-            }
+            QUOTA_GROUPS[QUOTA_GROUPS.length-1].splitQuotas = SPLITAB;
         } else {
             // Empty percentage means 0
             if (line[1] == "")
@@ -69,7 +67,7 @@ function ProcessData() {
             let question_code = line[3].replace(" ", "").split(",");
             quota_grp = QUOTA_GROUPS[QUOTA_GROUPS.length-1];
             if (question_code.length == 1) {
-                quota_grp.add_quota(line[0], parseFloat(line[1]), line[2], question_code[0], trisplit);
+                quota_grp.add_quota(line[0], parseFloat(line[1]), line[2], question_code[0], trisplit, true);
             } else {
                 for (let j = 0; j < question_code.length; j++) {
                     QUOTA_GROUPS[QUOTA_GROUPS.length-1].add_quota(line[0], parseFloat(line[1]), line[2], question_code[j], trisplit, j==0);

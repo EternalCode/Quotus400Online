@@ -37,10 +37,96 @@ class QuotaGroup {
         return this.group_name;
     }
 
+    generateSplitQuotas(mode, splitdepth, quota_name, quota_limit, question_name, question_code, nsize_override, flex) {
+        console.log("over here!", mode);
+        switch (mode) {
+            case 0: {
+                for (let i = 0; i < splitdepth.length; i++) {
+                    let splitname = "Split" + splitdepth[i].join("");
+                    for (let j = 0; j < splitdepth[i].length; j++) {
+                        let q = new Quota(this.get_name(), quota_name + "- Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), splitname, j+1, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        this.quotas.push(q);
+                    }
+                }
+                break;
+            }
+            case 1: {
+                for (let i = 0; i < splitdepth.length; i++) {
+                    let splitname = "Split" + splitdepth[i].join("");
+                    for (let j = 0; j < splitdepth[i].length; j++) {
+                        // Phone
+                        let q = new Quota(this.get_name(), quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(DUALMODE_SIZE[0]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(DUALMODE_SIZE[0]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 1, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(DUALMODE_SIZE[0]);
+                        this.quotas.push(q);
+                        // Email
+                        q = new Quota(this.get_name(), quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(DUALMODE_SIZE[1]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(DUALMODE_SIZE[1]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 2, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(DUALMODE_SIZE[1]);
+                        this.quotas.push(q);
+                    }
+                }
+                break;
+            }
+            case 2: {
+                for (let i = 0; i < splitdepth.length; i++) {
+                    let splitname = "Split" + splitdepth[i].join("");
+                    for (let j = 0; j < splitdepth[i].length; j++) {
+                        // Phone
+                        let q = new Quota(this.get_name(), quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[0]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[0]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 1, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[0]);
+                        this.quotas.push(q);
+                        // Email
+                        q = new Quota(this.get_name(), quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[1]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[1]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 2, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[1]);
+                        this.quotas.push(q);
+                        // Text
+                        q = new Quota(this.get_name(), quota_name + "- Text - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[2]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Text - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[2]);
+                        this.quotas.push(q);
+                        q = new Quota(this.get_name(), quota_name + "- Text - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 3, this.nSize, nsize_override, true, flex, mode==2, this.raw);
+                        q.calculate_limit(TRIMODE_SIZE[2]);
+                        this.quotas.push(q);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+
     add_quota(quota_name, quota_limit, question_name, question_code, nsize_override, expand=true) {
         let flex = 0
         if (this.flex > 0)
             flex = this.flex
+        console.log(this.splitQuotas);
         if (CLIENT == "tulchin") {
             // for the same quota, Tulchin wants a online, cell, and landline if it is a DNQ
             if (this.get_name().toLowerCase().includes("dnq")) {
@@ -66,6 +152,8 @@ class QuotaGroup {
                     this.quotas.push(q);
                     q = new Quota(this.get_name(), quota_name + " - Online", parseFloat(quota_limit), "pMode", 3, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
                     this.quotas.push(q);
+                } else if (SPLITAB == true && this.splitQuotas && !expand) {
+                    this.generateSplitQuotas(0, SPLITDEPTH, quota_name, quota_limit, question_name, question_code, nsize_override, flex);
                 }
             } else {
                 let q = new Quota(this.get_name(), quota_name, parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
@@ -75,88 +163,40 @@ class QuotaGroup {
                 this.limits.push(parseFloat(quota_limit));
         } else if (this.dual) {
             // Dual modes are Phone and Email.
-            let q = new Quota(this.get_name(), quota_name + "- Phone", parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
+            let q = new Quota(this.get_name(), quota_name + " - Phone", parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
             q.calculate_limit(DUALMODE_SIZE[0]);
+            q.isactive = false;
             this.quotas.push(q);
             q = new Quota(this.get_name(), quota_name + " - Phone", parseFloat(quota_limit), "pMode", 1, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
             q.calculate_limit(DUALMODE_SIZE[0]);
+            q.isactive = false;
             this.quotas.push(q);
-            q = new Quota(this.get_name(), quota_name + "- Email", parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
+            q = new Quota(this.get_name(), quota_name + " - Email", parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
             q.calculate_limit(DUALMODE_SIZE[1]);
+            q.isactive = false;
             this.quotas.push(q);
             q = new Quota(this.get_name(), quota_name + " - Email", parseFloat(quota_limit), "pMode", 2, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
             q.calculate_limit(DUALMODE_SIZE[1]);
+            q.isactive = false;
             this.quotas.push(q);
             // if show split quotas, then generate them
-            if (SPLITAB == true && this.splitQuotas) {
-                // Phone split A
-                q = new Quota(this.get_name(), quota_name + "- Phone SplitA", parseFloat(quota_limit / 2), question_name, question_code, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[0]);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + "- Phone SplitA", parseFloat(quota_limit / 2), "SplitAB", 1, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[0]);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + "- Phone SplitA", parseFloat(quota_limit / 2), "pMode", 1, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[1]);
-                this.quotas.push(q);
-                // Phone splt B
-                q = new Quota(this.get_name(), quota_name + "- Phone SplitB", parseFloat(quota_limit / 2), question_name, question_code, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[0]);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + "- Phone SplitB", parseFloat(quota_limit / 2), "SplitAB", 2, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[0]);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + "- Phone SplitB", parseFloat(quota_limit / 2), "pMode", 1, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[1]);
-                this.quotas.push(q);
-                // Email Split A
-                q = new Quota(this.get_name(), quota_name + "- Email SplitA", parseFloat(quota_limit / 2), question_name, question_code, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[1]);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + "- Email SplitA", parseFloat(quota_limit / 2), "SplitAB", 1, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[1]);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + "- Email SplitA", parseFloat(quota_limit / 2), "pMode", 2, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[1]);
-                this.quotas.push(q);
-                // Email Split B
-                q = new Quota(this.get_name(), quota_name + "- Email SplitB", parseFloat(quota_limit / 2), question_name, question_code, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[1]);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + "- Email SplitB", parseFloat(quota_limit / 2), "SplitAB", 2, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[1]);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + "- Email SplitB", parseFloat(quota_limit / 2), "pMode", 2, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                q.calculate_limit(DUALMODE_SIZE[1]);
-                this.quotas.push(q);
+            if (SPLITAB == true && this.splitQuotas && expand) {
+                this.generateSplitQuotas(1, SPLITDEPTH, quota_name, quota_limit, question_name, question_code, nsize_override, flex);
             }
             if (expand)
                 this.limits.push(parseFloat(quota_limit));
-        } else if (this.trisplit == false && this.splitQuotas) {
-            // Regular split quotas for single mode projects
+        } else if (this.trisplit == false) {
+            // Regular single mode quotas
+            console.log("reg quotas!", SPLITAB, this.splitQuotas, expand);
             let q = new Quota(this.get_name(), quota_name, parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
             this.quotas.push(q);
             if (expand)
                 this.limits.push(parseFloat(quota_limit))
-            if (SPLITAB == true) {
-                q = new Quota(this.get_name(), quota_name + " Split A", parseFloat(quota_limit / 2), question_name, question_code, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + " Split A", parseFloat(quota_limit / 2), "SplitAB", 1, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + " Split B", parseFloat(quota_limit / 2), question_name, question_code, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                this.quotas.push(q);
-                q = new Quota(this.get_name(), quota_name + " Split B", parseFloat(quota_limit / 2), "SplitAB", 2, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
-                this.quotas.push(q);
+            if (SPLITAB == true && this.splitQuotas && expand) {
+                this.generateSplitQuotas(0, SPLITDEPTH, quota_name, quota_limit, question_name, question_code, nsize_override, flex);
             }
-        } else if (this.trisplit == false) {
-            // Regular quotas
-            let q = new Quota(this.get_name(), quota_name, parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
-            this.quotas.push(q);
-            if (expand)
-                this.limits.push(parseFloat(quota_limit));
         } else {
             // tri split quotas include (Phone, email, text)->(this)(pMode)
-            // TODO: Split Quotas
             if (expand)
                 this.limits.push(parseFloat(quota_limit))
             let q = new Quota(this.get_name(), quota_name + "- Phone", parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
@@ -168,6 +208,9 @@ class QuotaGroup {
             q = new Quota(this.get_name(), quota_name + "- Text", parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
             q.calculate_limit(TRIMODE_SIZE[2]);
             this.quotas.push(q);
+            if (SPLITAB == true && this.splitQuotas && expand) {
+                this.generateSplitQuotas(2, SPLITDEPTH, quota_name, quota_limit, question_name, question_code, nsize_override, flex);
+            }
             // add mode specifiers only once
             if (expand) {
                 q = new Quota(this.get_name(), quota_name + "- Phone", parseFloat(quota_limit), "pMode", 1, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
@@ -199,7 +242,7 @@ class QuotaGroup {
                 WARNINGS.push("WARNING: Quota with the name '" + quota.fullname + "' repeated in group '" + this.get_name() + "'");
             // quotas with 0% quota limit must be set to a counter
             if (quota.limit == 0 && !(quota.fullname.toLowerCase().includes("dnq")) && !(quota.fullname.toLowerCase().includes("reschedule")))
-                WARNINGS.push("WARNING: Quota '" + quota.name + "' in group '" + this.get_name() + "' limit percentage is 0. Quota limit will be set to 0 and made inactive");
+                WARNINGS.push("WARNING: Quota '" + quota.fullname + "' in group '" + this.get_name() + "' limit percentage is 0. Quota limit will be set to 0 and made inactive");
         }
         // check percentages add up to 100, if group isn't a DNQ/Reschedule
         if (!((this.group_name.toLowerCase().includes("dnq") || this.group_name.toLowerCase().includes("reschedule")))) {
