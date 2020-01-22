@@ -113,6 +113,24 @@
             </div>
         </div>
         <div class="form-group row">
+            <label for="DualmodeSizes" class="col-sm-2 col-form-label">Splits</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="SplitModes" placeholder="AB, CD, ABC, ABCD">
+            </div>
+        </div>
+        <div class="form-group row" align="left" margin:10px>
+            <div class="col-sm-10">
+                <input type="checkbox" class="form-check-input" id="enableSplitAB">
+                <label class="form-check-label" for="enableSplitAB">&nbsp;&nbsp;&nbsp;Enable Split Quotas&nbsp;&nbsp;&nbsp; </label>
+            </div>
+        </div>
+        <div class="form-group row" align="left" margin:10px>
+            <div class="col-sm-10">
+                <input type="checkbox" class="form-check-input" id="TermWarn">
+                <label class="form-check-label" for="TermWarn">&nbsp;&nbsp;&nbsp;Terminate with Warning&nbsp;&nbsp;&nbsp; </label>
+            </div>
+        </div>
+        <div class="form-group row">
         <div class="dropdown" align="left">
             <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Client name
@@ -122,18 +140,6 @@
                 <button class="dropdown-item btn-secondary" type="button" onClick=SelectClient(1)>Tulchin</button>
             </div>
         </div>
-        </div>
-        <div class="form-group row" align="left" margin:10px>
-            <div class="col-sm-10">
-                <input type="checkbox" class="form-check-input" id="enableSplitAB">
-                <label class="form-check-label" for="enableSplitAB">&nbsp;&nbsp;&nbsp;Enable SplitAB quotas&nbsp;&nbsp;&nbsp; </label>
-            </div>
-        </div>
-        <div class="form-group row" align="left" margin:10px>
-            <div class="col-sm-10">
-                <input type="checkbox" class="form-check-input" id="TermWarn">
-                <label class="form-check-label" for="TermWarn">&nbsp;&nbsp;&nbsp;Terminate with Warning&nbsp;&nbsp;&nbsp; </label>
-            </div>
         </div>
     </form>
     <button class="btn btn-primary" onClick=ProcessInput()>Process</button>
