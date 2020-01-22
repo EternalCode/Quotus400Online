@@ -6,7 +6,7 @@ var TERMWARN;
 var CLIENT;
 var WARNINGS = [];
 var QUOTA_GROUPS = [];
-var SPLITDEPTH = [["A", "B"]];
+var SPLITDEPTH = [];
 var full_data;
 var ClientSelected = 0;
 var ClientNameBuff = ["", "tulchin"];
@@ -18,6 +18,7 @@ function SelectClient(n) {
 function ProcessInput() {
 	// reparse all arguments
 	WARNINGS = [];
+	SPLITDEPTH = [];
 	WARNINGS.push("<h3>DATA VALIDATION RESULTS:</h3>");
 	let toDisplay = ""
 	NSIZE = parseInt(document.getElementById("EndSize").value);
@@ -29,6 +30,22 @@ function ProcessInput() {
 	DUALMODE_SIZE = document.getElementById("DualmodeSizes").value;
 	CLIENT = ClientNameBuff[ClientSelected];
 	SPLITAB = document.getElementById("enableSplitAB").checked;
+	let splitval = document.getElementById("SplitModes").value;
+	if (SPLITAB && splitval == "") {
+		alert("Splits enabled without specifications on what the splits are. Please fill out the Splits form.");
+		return;
+	} else {
+		splitval = splitval.split(" ").join("").split(",");
+		for (let i = 0; i < splitval.length; i++) {
+			// loop through each split type
+			let individualSplits = [];
+			for (let j = 0; j < splitval[i].length; j++) {
+				// get each split name
+				individualSplits.push(splitval[i][j]);
+			}
+			SPLITDEPTH.push(individualSplits);
+		}
+	}
 	TERMWARN = document.getElementById("TermWarn").checked;
 
 	// process mode args
@@ -117,93 +134,3 @@ function ViewRawData() {
 	$("button#continue3").remove();
 	$("div#ButtonBuffer").append(viewHTML);
 }
-
-/*
-SplitAB
-A	50	SplitAB	1
-B	50	SplitAB	2
-
-*/
-/* Mode= 0 is normal, 1 = Dual mode, 2 = Trimode
-* Split depth [["a, "b"],[ "c", "d"]]
-*/
-
-// function splitQuotas(mode, splitdepth, gname, quota_name, quota_limit, question_name, question_code, grpSize, nsize_override, flex, is_raw, grp) {
-// 	switch (mode) {
-// 		case 0: {
-// 			for (let i = 0; i < splitdepth.length; i++) {
-// 				for (let j = 0; j < splitdepth[i].length; j++) {
-// 					let q = new Quota(gname, quota_name + "- Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					grp.quotas.push(q);
-// 				}
-// 			}
-// 			break;
-// 		}
-// 		case 1: {
-// 			for (let i = 0; i < splitdepth.length; i++) {
-// 				let splitname = "Split" + splitdepth[i].join("");
-// 				for (let j = 0; j < splitdepth[i].length; j++) {
-// 					// Phone
-// 					let q = new Quota(gname, quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(DUALMODE_SIZE[0]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(DUALMODE_SIZE[0]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 1, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(DUALMODE_SIZE[0]);
-// 					grp.quotas.push(q);
-// 					// Email
-// 					q = new Quota(gname, quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(DUALMODE_SIZE[1]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(DUALMODE_SIZE[1]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 2, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(DUALMODE_SIZE[1]);
-// 					grp.quotas.push(q);
-// 				}
-// 			}
-// 			break;
-// 		}
-// 		case 2: {
-// 			for (let i = 0; i < splitdepth.length; i++) {
-// 				let splitname = "Split" + splitdepth[i].join("");
-// 				for (let j = 0; j < splitdepth[i].length; j++) {
-// 					// Phone
-// 					let q = new Quota(gname, quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[0]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[0]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Phone - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 1, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[0]);
-// 					grp.quotas.push(q);
-// 					// Email
-// 					q = new Quota(gname, quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[1]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[1]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Email - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 2, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[1]);
-// 					grp.quotas.push(q);
-// 					// Text
-// 					q = new Quota(gname, quota_name + "- Text - Split " + splitdepth[i][j], parseFloat(quota_limit / splitdepth[i].length), question_name, question_code, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[2]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Text - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, splitname, j+1, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[2]);
-// 					grp.quotas.push(q);
-// 					q = new Quota(gname, quota_name + "- Text - Split " + splitdepth[i][j], parseFloat(quota_limit) / splitdepth[i].length, "pMode", 3, grpSize, nsize_override, true, flex, mode==2, is_raw);
-// 					q.calculate_limit(TRIMODE_SIZE[2]);
-// 					grp.quotas.push(q);
-// 				}
-// 			}
-// 			break;
-// 		}
-// 	}
-// }
