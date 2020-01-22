@@ -92,9 +92,7 @@ function ProcessData() {
                         for (let m = 0; m < SPLITDEPTH.length; m++) {
                             for (let n = 0; n < SPLITDEPTH[m].length; n++) {
                                 if (SPLITDEPTH[m][n] == splitID) {
-                                    console.log(quota_name, limit, "Split" + SPLITDEPTH[m].join(""), n);
-                                    //(quota_name, quota_limit, question_name, question_code, nsize_override, expand=true)
-                                    quota_grp.add_quota(quota_name, limit, "Split" + SPLITDEPTH[m].join(""), n, false, false);
+                                    quota_grp.add_quota(quota_name, limit, "Split" + SPLITDEPTH[m].join(""), n + 1, false, false);
                                 }
                             }
                         }
