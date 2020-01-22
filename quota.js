@@ -87,7 +87,7 @@ class Quota {
 		if (this.tri)
 			this.isactive = false;
 
-		let quota_settings = '"{""action"":""' + this.action + '"",""autoload_url"":""1"",""active"":""' + (this.isactive ? 1 : 0) + '"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Sorry your responses have exceeded a quota on this survey.""}]}"'
+		let quota_settings = '"{""action"":""1"",""autoload_url"":""1"",""active"":""' + (this.isactive ? 1 : 0) + '"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Sorry your responses have exceeded a quota on this survey.""}]}"'
 		let quota_settings_dnq = '"{""action"":""' + this.action + '"",""autoload_url"":""1"",""active"":""1"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Thank and Terminate.""}]}"'
 		let quota_settings_dnq_online = '"{""action"":""' + this.action + '"",""autoload_url"":""1"",""active"":""1"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Thank you for your time.""}]}"'
 		let quota_settings_reschedule = '"{""action"":""' + this.action + '"",""autoload_url"":""1"",""active"":""1"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Reschedule and end call.""}]}"'
