@@ -31,7 +31,7 @@ class Quota {
 		this.calculated = false;
 		this.max = 0;
 		this.delta = 0;
-		this.is_duplicate = false;
+		this.is_duplicate = is_dupe;
 		this.action = TERMWARN ? 2 : 1;
 
 		if (this.flex > 0 && (this.max + this.delta) > 0)
