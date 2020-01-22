@@ -60,12 +60,54 @@ function ProcessData() {
             q_prefix = line;//line.split(" ")[0]
             QUOTA_GROUPS.push(new QuotaGroup(q_prefix, trisplit, gflex, is_raw, CLIENT, NSIZE, TRIMODE_SIZE, isdual));
             QUOTA_GROUPS[QUOTA_GROUPS.length-1].splitQuotas = SPLITAB;
+        } else if (line[0].toLowerCase().includes("(lake")) {
+            let regCount = parseInt(line[0].match("\(lake ([0-9][0-9]*)\)")[0].replace("lake", ""));
+            let header = line;
+            let lakeTable = [];
+
+            for (let j = i + 1; j < i + regCount + 1; j++) {
+                lakeTable.push(contents[j].trim().split("\t"));
+            }
+
+            let gender = parseInt(lakeTable[0].splice(0, 1)[0]);
+            header[0] = header[0].replace(/\(lake [0-9][0-9]*\)/gi,"");
+            header.splice(0, 2);
+            QUOTA_GROUPS.push(new QuotaGroup("Table", trisplit, gflex, true, CLIENT, NSIZE, TRIMODE_SIZE, isdual));
+            let quota_grp = QUOTA_GROUPS[QUOTA_GROUPS.length-1];
+            quota_grp.splitQuotas = false;
+            let regions = []
+            for (let k = 0; k < regCount; k++) {
+                regions.push(lakeTable[k].splice(0, 1));
+            }
+            for (let l = 0; l < header.length; l++) {
+                for (let k = 0; k < regCount; k++) {
+                    let quota_name = gender == 1 ? "Male " : "Female ";
+                    quota_name += regions[k] + " ";
+                    quota_name += header[l];
+                    let limit = parseInt(lakeTable[k].splice(0, 1));
+                    quota_grp.add_quota(quota_name, limit, "pGender", gender, false, false);
+                    quota_grp.add_quota(quota_name, limit, "pRegion", k+1, false, false);
+                    for (let c = 0; c < header[l].length; c++) {
+                        let splitID = header[l][c];
+                        for (let m = 0; m < SPLITDEPTH.length; m++) {
+                            for (let n = 0; n < SPLITDEPTH[m].length; n++) {
+                                if (SPLITDEPTH[m][n] == splitID) {
+                                    console.log(quota_name, limit, "Split" + SPLITDEPTH[m].join(""), n);
+                                    //(quota_name, quota_limit, question_name, question_code, nsize_override, expand=true)
+                                    quota_grp.add_quota(quota_name, limit, "Split" + SPLITDEPTH[m].join(""), n, false, false);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            i += regCount + 1;
         } else {
             // Empty percentage means 0
             if (line[1] == "")
                 line[1] = 0;
             let question_code = line[3].replace(" ", "").split(",");
-            quota_grp = QUOTA_GROUPS[QUOTA_GROUPS.length-1];
+            let quota_grp = QUOTA_GROUPS[QUOTA_GROUPS.length-1];
             if (question_code.length == 1) {
                 quota_grp.add_quota(line[0], parseFloat(line[1]), line[2], question_code[0], trisplit, true);
             } else {
@@ -78,7 +120,6 @@ function ProcessData() {
         }
     }
     WARNINGS = [];
-    WARNINGS.push("<h3>DATA VALIDATION RESULTS:</h3>");
     let sum = 0;
     for (let i = 0; i < QUOTA_GROUPS.length; i++) {
         sum += QUOTA_GROUPS[i].validate_quotas();
@@ -88,6 +129,7 @@ function ProcessData() {
     for (let i = 0; i < QUOTA_GROUPS.length; i++) {
         full_data += QUOTA_GROUPS[i].display_quotas();
     }
+    WARNINGS.push("<h3>DATA VALIDATION RESULTS:</h3>");
     if (sum == 0) {
         WARNINGS.push("<b>All OK.</b>");
         CreateDownloadButton();
