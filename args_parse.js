@@ -7,6 +7,7 @@ var CLIENT;
 var WARNINGS = [];
 var QUOTA_GROUPS = [];
 var SPLITDEPTH = [];
+var INCPHONETYPE;
 var full_data;
 var ClientSelected = 0;
 var ClientNameBuff = ["", "tulchin"];
@@ -28,9 +29,17 @@ function ProcessInput() {
 	}
 	TRIMODE_SIZE = document.getElementById("TrimodeSizes").value;
 	DUALMODE_SIZE = document.getElementById("DualmodeSizes").value;
+	INCPHONETYPE = document.getElementById("PhoneType").value;
 	CLIENT = ClientNameBuff[ClientSelected];
 	SPLITAB = document.getElementById("enableSplitAB").checked;
 	let splitval = document.getElementById("SplitModes").value;
+	if (INCPHONETYPE == "") {
+		// what should happen ?
+	} else {
+		INCPHONETYPE = INCPHONETYPE.split("%").join("").split(" ").join("").split(",");
+	}
+
+
 	if (SPLITAB && splitval == "") {
 		alert("Splits enabled without specifications on what the splits are. Please fill out the Splits form.");
 		return;

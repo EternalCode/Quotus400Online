@@ -18,7 +18,7 @@ function rd(x) {
 }
 
 class QuotaGroup {
-	constructor( group_name, trisplit, flex, raw, cli, nsize, tri_sizes, dual) {
+	constructor(group_name, trisplit, flex, raw, cli, nsize, tri_sizes, dual) {
         this.group_name = group_name;
         this.trisplit = trisplit;
         this.flex = parseInt(flex);
@@ -31,6 +31,7 @@ class QuotaGroup {
         this.names = [];
         this.dual = dual;
         this.splitQuotas = false;
+        this.is_table = false;
     }
 
     get_name() {
@@ -135,7 +136,7 @@ class QuotaGroup {
                 if (!flagIncluded) {
                     for (let c = 0; c < splitID.length; c++) {
                         let splitInfo = GetSplitMuliplier(splitID[c]);
-                        splitInfo[0] = splitInfo[0] / splitID.length;
+                        splitInfo[0] = Math.pow(splitInfo[0], splitsToProcess[i][0].length);//0.5^i+1
                         this.SplitByMode(mode, splitInfo, splitsToProcess[i][j], quota_name, quota_limit, question_name, question_code, nsize_override, flex);
                     }
                 } else {
@@ -280,7 +281,7 @@ class QuotaGroup {
             if (sum != 100) {
                 if (!this.raw) {
                     WARNINGS.push("WARNING: Sum of percentages in quota: '" + this.get_name() + "' Do not add up to 100% at: " + sum +"%");
-                } else {
+                } else if (!this.is_table) {
                     sum = 0;
                     for (let i = 0; i < this.quotas.length; i++) {
                         sum += this.quotas[i].limit;
