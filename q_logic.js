@@ -182,7 +182,6 @@ function ProcessData() {
                 for (let k = 0; k < splitID.length; k++) {
                     let splitInfo = GetSplitMuliplier(splitID[k]);
                     splitInfo[0] = Math.pow(splitInfo[0], splitsToProcess[i][0].length);//0.5^i+1
-                    console.log(splitInfo);
                     quota_grp.add_quota("Split" + splitID, parseFloat(splitInfo[0] * 100), splitInfo[2], splitInfo[1], false, k==0);
                     quota_grp.quotas[quota_grp.quotas.length - 1].is_duplicate = true;
                 }

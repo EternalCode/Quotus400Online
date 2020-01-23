@@ -259,8 +259,6 @@ class QuotaGroup {
             for (let j = 0; j < this.quotas.length; j++) {
                 if (quota.fullname == this.quotas[j].fullname && (this.quotas[j].is_duplicate == false) &&
                      (quota.question_name == this.quotas[j].question_name)) {
-                         if (count > 0)
-                            console.log("same, ", quota, this.quotas[j]);
                          count += 1;
                      }
             }
