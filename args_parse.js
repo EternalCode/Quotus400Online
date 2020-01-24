@@ -10,7 +10,7 @@ var SPLITDEPTH = [];
 var INCPHONETYPE;
 var full_data;
 var ClientSelected = 0;
-var ClientNameBuff = ["", "tulchin"];
+var ClientNameBuff = ["", "TUL"];
 
 function SelectClient(n) {
 	ClientSelected = n;

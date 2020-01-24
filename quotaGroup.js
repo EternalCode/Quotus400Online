@@ -153,8 +153,8 @@ class QuotaGroup {
         let flex = 0
         if (this.flex > 0)
             flex = this.flex
-        if (CLIENT == "tulchin") {
-            // for the same quota, Tulchin wants a online, cell, and landline if it is a DNQ
+        if (CLIENT == "TUL") {
+            // for the same quota, TUL wants a online, cell, and landline if it is a DNQ
             if (this.get_name().toLowerCase().includes("dnq")) {
                 let q = new Quota(this.get_name(), quota_name, parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
                 this.quotas.push(q);

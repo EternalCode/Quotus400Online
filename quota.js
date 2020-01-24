@@ -33,6 +33,17 @@ class Quota {
 		this.delta = 0;
 		this.is_duplicate = is_dupe;
 		this.action = TERMWARN ? 2 : 1;
+        this.isCounter = false;
+        if (this.name.includes("(counter)")) {
+            // counter
+            this.name = this.name.replace("(counter)", "");
+            this.isCounter = true;
+            let temp = [];
+            for (let i = 0; i < NSIZE.toString().length; i++) {
+                temp.push("9");
+            }
+            this.counter_limit = parseInt(temp.join(""));
+        }
 
 		if (this.flex > 0 && (this.max + this.delta) > 0)
 			this.fullname += " - Flex " + (this.flex).toString() + "% " + " +/-" + (this.delta).toString();
@@ -65,6 +76,9 @@ class Quota {
 			size = nsize;
 		this.limit = (size * (this.limit / 100));
 		this.max = this.limit;
+        if (this.isCounter) {
+            this.limit = this.counter_limit;
+        }
 		// flex
 		if (this.flex > 0) {
 			this.delta = rd((this.flex / 100) * size);
