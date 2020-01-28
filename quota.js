@@ -34,9 +34,12 @@ class Quota {
 		this.is_duplicate = is_dupe;
 		this.action = TERMWARN ? 2 : 1;
         this.isCounter = false;
+        console.log(this.name);
         if (this.name.includes("(counter)")) {
             // counter
             this.name = this.name.replace("(counter)", "");
+            this.name += " Min: ";
+            this.fullname = this.prefix + " - " + this.name;
             this.isCounter = true;
             let temp = [];
             for (let i = 0; i < NSIZE.toString().length; i++) {
@@ -76,9 +79,6 @@ class Quota {
 			size = nsize;
 		this.limit = (size * (this.limit / 100));
 		this.max = this.limit;
-        if (this.isCounter) {
-            this.limit = this.counter_limit;
-        }
 		// flex
 		if (this.flex > 0) {
 			this.delta = rd((this.flex / 100) * size);
@@ -100,6 +100,12 @@ class Quota {
 			this.isactive = false;
 		if (this.tri)
 			this.isactive = false;
+        if (this.isCounter) {
+            this.fullname += this.limit;
+            this.limit = this.counter_limit;
+            this.active = false;
+
+        }
 
 		let quota_settings = '"{""action"":""1"",""autoload_url"":""1"",""active"":""' + (this.isactive ? 1 : 0) + '"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Sorry your responses have exceeded a quota on this survey.""}]}"'
 		let quota_settings_dnq = '"{""action"":""' + this.action + '"",""autoload_url"":""1"",""active"":""1"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Thank and Terminate.""}]}"'

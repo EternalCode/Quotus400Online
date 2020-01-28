@@ -11,7 +11,7 @@ function ProcessData() {
     QUOTA_GROUPS = [];
 
     /* Read form content */
-    contents = document.getElementById("quotusInput").value;
+    let contents = document.getElementById("quotusInput").value;
     contents = contents.split("%").join("").split("\n");
     for (let i = 0; i < contents.length; i++) {
         // if a line is empty, toss it
