@@ -49,7 +49,7 @@ class Quota {
         }
 
 		if (this.flex > 0 && (this.max + this.delta) > 0)
-			this.fullname += " - Flex " + (this.flex).toString() + "% " + " +/-" + (this.delta).toString();
+			this.fullname += " - Flex " + (this.flex).toString() + "% - added " + (this.delta).toString();
 		if (this.fullname.toLowerCase().includes("split"))
 			this.isactive = false;
 	}
@@ -83,7 +83,7 @@ class Quota {
 		if (this.flex > 0) {
 			this.delta = rd((this.flex / 100) * size);
 			this.limit += this.delta;
-			this.fullname += " - Flex " + (this.flex).toString() + "% " + " +/-" + (this.delta).toString();
+			this.fullname += " - Flex " + (this.flex).toString() + "% - added " + (this.delta).toString();
 		}
 		this.limit = rd(this.limit);
 		this.calculated = true;
@@ -104,7 +104,9 @@ class Quota {
             this.fullname += this.limit;
             this.limit = this.counter_limit;
             this.active = false;
-
+        }
+        if (this.flex > 0) {
+            this.limit += parseInt(this.delta);
         }
 
 		let quota_settings = '"{""action"":""1"",""autoload_url"":""1"",""active"":""' + (this.isactive ? 1 : 0) + '"",""qls"":[{""quotals_language"":""en"",""quotals_name"":""x"",""quotals_url"":"""",""quotals_urldescrip"":"""",""quotals_message"":""Sorry your responses have exceeded a quota on this survey.""}]}"'
