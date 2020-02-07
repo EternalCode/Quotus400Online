@@ -59,7 +59,7 @@ function ProcessData() {
             // group name
             q_prefix = line;//line.split(" ")[0]
             QUOTA_GROUPS.push(new QuotaGroup(q_prefix, trisplit, gflex, is_raw, CLIENT, NSIZE, TRIMODE_SIZE, isdual));
-            QUOTA_GROUPS[QUOTA_GROUPS.length-1].splitQuotas = SPLITAB;
+            QUOTA_GROUPS[QUOTA_GROUPS.length-1].splitQuotas = SPLITAB && isSplit;
         } else if (line[0].toLowerCase().includes("(lake")) {
             let regCount = parseInt(line[0].match("\(lake ([0-9][0-9]*)\)")[0].replace("lake", ""));
             let header = line;
