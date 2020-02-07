@@ -16,7 +16,7 @@ function ProcessData() {
     for (let i = 0; i < contents.length; i++) {
         // if a line is empty, toss it
         let line = contents[i];
-        if (line == "")
+        if (line == "" || line.trim() == "")
             continue;
         // reset logic globals
         trisplit = false;
