@@ -148,6 +148,29 @@ class QuotaGroup {
         }
     }
 
+    remove_duplicates() {
+        for (let i = this.quotas.length - 1; i >= 0; i--) {
+            let q1 = this.quotas[i];
+            let seen = false;
+            for (let j = this.quotas.length - 1; j >= 0; j--) {
+                if (j == i)
+                    continue;
+                let q2 = this.quotas[j];
+                // compare q1 and q2, if identical, mark q2 to be removed
+                if (q1.name == q2.name&&q1.limit == q2.limit&&q1.question_name == q2.question_name&&
+                    q1.q_code == q2.q_code&&q1.size == q2.size&&q1.nsize_override == q2.nsize_override&&
+                    q1.prefix == q2.prefix&&q1.flex == q2.flex&&q1.isactive == q2.isactive&&
+                    q1.tri == q2.tri&&q1.raw == q2.raw&&q1.counter_limit == q2.counter_limit&&
+                    q1.fullname == q2.fullname&&q1.calculated == q2.calculated&&q1.max == q2.max&&
+                    q1.delta == q2.delta&&q1.is_duplicate == q2.is_duplicate&&q1.action == q2.action&&
+                    q1.isCounter == q2.isCounter) {
+                        this.quotas.splice(i, 1);
+                        break;
+                    }
+            }
+        }
+    }
+
 
     add_quota(quota_name, quota_limit, question_name, question_code, nsize_override, expand=true) {
         let flex = 0
@@ -178,7 +201,7 @@ class QuotaGroup {
                     this.quotas.push(q);
                     q = new Quota(this.get_name(), quota_name + " - Online", parseFloat(quota_limit), "pMode", 3, this.nSize, nsize_override, true, flex, this.trisplit, this.raw);
                     this.quotas.push(q);
-                } else if (SPLITAB == true && this.splitQuotas && !expand) {
+                } else if (SPLITAB == true && this.splitQuotas) {
                     this.generateSplitQuotas(0, SPLITDEPTH, quota_name, quota_limit, question_name, question_code, nsize_override, flex);
                 }
             } else {
@@ -206,7 +229,7 @@ class QuotaGroup {
             q.isactive = false;
             this.quotas.push(q);
             // if show split quotas, then generate them
-            if (SPLITAB == true && this.splitQuotas && expand) {
+            if (SPLITAB == true && this.splitQuotas) {
                 this.generateSplitQuotas(1, SPLITDEPTH, quota_name, quota_limit, question_name, question_code, nsize_override, flex);
             }
             if (expand)
@@ -217,7 +240,7 @@ class QuotaGroup {
             this.quotas.push(q);
             if (expand)
                 this.limits.push(parseFloat(quota_limit))
-            if (SPLITAB == true && this.splitQuotas && expand) {
+            if (SPLITAB == true && this.splitQuotas) {
                 this.generateSplitQuotas(0, SPLITDEPTH, quota_name, quota_limit, question_name, question_code, nsize_override, flex);
             }
         } else {
@@ -233,7 +256,7 @@ class QuotaGroup {
             q = new Quota(this.get_name(), quota_name + "- Text", parseFloat(quota_limit), question_name, question_code, this.nSize, nsize_override, !(expand), flex, this.trisplit, this.raw);
             q.calculate_limit(TRIMODE_SIZE[2]);
             this.quotas.push(q);
-            if (SPLITAB == true && this.splitQuotas && expand) {
+            if (SPLITAB == true && this.splitQuotas) {
                 this.generateSplitQuotas(2, SPLITDEPTH, quota_name, quota_limit, question_name, question_code, nsize_override, flex);
             }
             // add mode specifiers only once
@@ -252,6 +275,7 @@ class QuotaGroup {
     }
 
     validate_quotas() {
+        this.remove_duplicates();
         for (let i = 0; i < this.quotas.length; i++) {
             let quota = this.quotas[i];
             let count = 0;
@@ -296,7 +320,6 @@ class QuotaGroup {
             WARNINGS.sort();
         }
         DisplayWarnings();
-        console.log("w: ", WARNINGS);
         return WARNINGS.length;
     }
 

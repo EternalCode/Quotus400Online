@@ -34,7 +34,6 @@ class Quota {
 		this.is_duplicate = is_dupe;
 		this.action = TERMWARN ? 2 : 1;
         this.isCounter = false;
-        console.log(this.name);
         if (this.name.includes("(counter)")) {
             // counter
             this.name = this.name.replace("(counter)", "");
