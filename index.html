@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="main.css">
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="args_parse.js"></script>
     <script src="quota.js"></script>
@@ -34,49 +35,44 @@
         $( document ).ready(function() {
             document.getElementById("quotusInput").innerHTML = "";
             document.getElementById("quotusInput").innerText = "";
+             $('#clientSelect').change(function () {
+                 console.log("changed", $('#clientSelect option:selected')[0].value);
+                 SelectClient(parseInt($('#clientSelect option:selected')[0].value));
+             });
         });
     </script>
   </head>
 
   <body>
     <!-- Navbar -->
-  <nav class="navbar navbar-default navbar-fixed-top" style="border-radius: 0; width:100%">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Menu</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
-      <img src="icons/initials.PNG" style="padding-top: 13px; padding-left: 10px"></img>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav justified" style="margin-left: -50px;">
-        <li class="nav-glow-effects"><a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"> Home</span></a></li>
-        <li class="nav-glow-effects"><a href="docs.html"><i class="fa fa-book" aria-hidden="true"> Documentation</i></a></li>
-        <li class="nav-glow-effects"><a href="https://github.com/eternalcode"><i class="fa fa-github" aria-hidden="true"> Source</i></a></li>
-      </ul>
-
-
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-item nav-link active" href="index.html"><i class="fa fa-home" aria-hidden="true"> Home</i></a>
+        </li>
+        <li class="nav-item mr-auto">
+          <a class="nav-item nav-link active" href="docs.html"><i class="fa fa-book" aria-hidden="true"> Documentation</i></a>
+        </li>
+      <li class="nav-item mr-auto">
+          <a class="nav-item nav-link active" href="https://github.com/EternalCode/Quotus400Online"><i class="fa fa-github" aria-hidden="true"> Source</i></a>
+      </li>
+        </ul>
+      </div>
 </nav>
 
-
   <!-- Header -->
-<div class="container" style="padding: 0px;width:100%">
-  <div class="jumbotron text-center" id="webpage-title" style="margin-top: 20px;padding-bottom: 10px">
+  <div class="jumbotron text-center jumbotron-fluid" id="webpage-title" style="padding-bottom: 10px">
       <font style="color: white"><h1><strong>Quotus 400</strong> <br>
       <small style="color: #FFFFFF;" size="1">Make a codesheet, make a quota sheet.</small>
       </h1></font>
       <div style="text-align: right">
         <font size="4vh" style="color: white">v400</font>
       </div>
-    </div>
   </div>
 
 <div style="background-color: #EEEEEE;">
@@ -89,17 +85,20 @@
     <hr class="subtle_section">
     <br>
     <br>
-    <label for="quotusInput">Quotus Input space</label>
-    <textarea class="form-control" id="quotusInput" rows="20" placeholder="Paste the Codesheet data here.">
-    </textarea>
-    <br>
     <form>
+        <div class="form-group">
+            <label for="quotusInput">Quotus Input space</label>
+            <textarea class="form-control" id="quotusInput" rows="20" placeholder="Paste your conversions here.">
+            </textarea>
+        </div>
+        <br>
         <div class="form-group row">
-            <label for="EndSize" id="nSize" class="col-sm-2 col-form-label">End Size*</label>
+            <label for="EndSize" class="col-sm-2 col-form-label">End Size*</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="EndSize" value="0">
+                <input type="text" class="form-control" id="EndSize" placeholder="0">
             </div>
         </div>
+
         <div class="form-group row">
             <label for="TrimodeSizes" class="col-sm-2 col-form-label">Trimode Sizes</label>
             <div class="col-sm-10">
@@ -124,28 +123,27 @@
                 <input type="text" class="form-control" id="SplitModes" placeholder="AB, CD, ABC, ABCD">
             </div>
         </div>
-        <div class="form-group row" align="left" margin:10px>
-            <div class="col-sm-10">
-                <input type="checkbox" class="form-check-input" id="enableSplitAB">
-                <label class="form-check-label" for="enableSplitAB">&nbsp;&nbsp;&nbsp;Enable Split Quotas&nbsp;&nbsp;&nbsp; </label>
-            </div>
+        <div class="form-check" align = "left">
+            <input class="form-check-input" type="checkbox" value="" id="enableSplitAB">
+            <label class="form-check-label" for="enableSplitAB">
+                Enable Split Quotas
+            </label>
         </div>
-        <div class="form-group row" align="left" margin:10px>
-            <div class="col-sm-10">
-                <input type="checkbox" class="form-check-input" id="TermWarn">
-                <label class="form-check-label" for="TermWarn">&nbsp;&nbsp;&nbsp;Terminate with Warning&nbsp;&nbsp;&nbsp; </label>
-            </div>
+        <div class="form-check" align = "left">
+            <input class="form-check-input" type="checkbox" value="" id="TermWarn">
+            <label class="form-check-label" for="TermWarn">
+                Terminate with Warning
+            </label>
         </div>
-        <div class="form-group row">
-        <div class="dropdown" align="left">
-            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Client name
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button class="dropdown-item btn-secondary" type="button" onClick=SelectClient(0)>No Specification</button>
-                <button class="dropdown-item btn-secondary" type="button" onClick=SelectClient(1)>TUL</button>
-            </div>
-        </div>
+        <bR>
+        <div class="form-group" align="left">
+            <label for="clientSelect">Client</label>
+            <select class="form-control" id="clientSelect">
+                <option value="0">No Client Specification</option>
+                <option value="1">Tall chin</option>
+                <option value="2">Fully Metalic Monster Madness</option>
+                <option value="3">Electronic Master of Ceremonies</option>
+            </select>
         </div>
     </form>
     <button class="btn btn-primary" onClick=ProcessInput()>Process</button>
