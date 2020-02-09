@@ -34,10 +34,14 @@ function ProcessInput() {
 	CLIENT = ClientNameBuff[ClientSelected];
 	SPLITAB = document.getElementById("enableSplitAB").checked;
 	let splitval = document.getElementById("SplitModes").value;
-	if (INCPHONETYPE == "") {
-		// what should happen ?
+	if (CLIENT == "EFMMM") {
+		INCPHONETYPE = [30, 70];
 	} else {
-		INCPHONETYPE = INCPHONETYPE.split("%").join("").split(" ").join("").split(",");
+		if (INCPHONETYPE == "") {
+			// what should happen ?
+		} else {
+			INCPHONETYPE = INCPHONETYPE.split("%").join("").split(" ").join("").split(",");
+		}
 	}
 
 

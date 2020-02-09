@@ -34,6 +34,11 @@ class Quota {
 		this.is_duplicate = is_dupe;
 		this.action = TERMWARN ? 2 : 1;
         this.isCounter = false;
+        if (this.question_name == "pPhoneType" && CLIENT == "efmmm" && question_code == 1) {
+            this.name += ("(counter)");
+            this.isactive = false;
+        }
+
         if (this.name.includes("(counter)")) {
             // counter
             this.name = this.name.replace("(counter)", "");
@@ -45,10 +50,12 @@ class Quota {
                 temp.push("9");
             }
             this.counter_limit = parseInt(temp.join(""));
+            this.isactive = false;
         }
 
-		if (this.flex > 0 && (this.max + this.delta) > 0)
-			this.fullname += " - Flex(" + (this.flex).toString() + "%)" + (CLIENT == "EFMMM" ? (" - added " + (this.delta).toString()) : "";
+		if (this.flex > 0 && (this.max + this.delta) > 0) {
+            this.fullname += " - Flex(" + (this.flex).toString() + "%)";
+        }
 		if (this.fullname.toLowerCase().includes("split"))
 			this.isactive = false;
 	}
@@ -82,7 +89,7 @@ class Quota {
 		if (this.flex > 0) {
 			this.delta = rd((this.flex / 100) * size);
 			this.limit += this.delta;
-			this.fullname += " - Flex(" + (this.flex).toString() + "%)" + (CLIENT == "EFMMM" ? (" - added " + (this.delta).toString()) : "";
+			this.fullname += " - Flex(" + (this.flex).toString() + "%)";
 		}
 		this.limit = rd(this.limit);
 		this.calculated = true;
