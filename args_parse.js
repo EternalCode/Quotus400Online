@@ -10,11 +10,12 @@ var SPLITDEPTH = [];
 var INCPHONETYPE;
 var full_data;
 var ClientSelected = 0;
-var ClientNameBuff = ["", "TUL"];
+var ClientNameBuff = ["", "TUL", "EFMMM", "Easymc"];
 
 function SelectClient(n) {
 	ClientSelected = n;
 }
+
 
 function ProcessInput() {
 	// reparse all arguments

@@ -126,7 +126,7 @@ function ProcessData() {
             // Empty percentage means 0
             if (line[1] == "")
                 line[1] = 0;
-            let question_code = line[3].replace(" ", "").split(",");
+            let question_code = line[3].split(" ").join("").split(",");
             let quota_grp = QUOTA_GROUPS[QUOTA_GROUPS.length-1];
             if (question_code.length == 1) {
                 quota_grp.add_quota(line[0], parseFloat(line[1]), line[2], question_code[0], trisplit, true);

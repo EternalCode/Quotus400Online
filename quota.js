@@ -48,7 +48,7 @@ class Quota {
         }
 
 		if (this.flex > 0 && (this.max + this.delta) > 0)
-			this.fullname += " - Flex " + (this.flex).toString() + "% - added " + (this.delta).toString();
+			this.fullname += " - Flex(" + (this.flex).toString() + "%)" + (CLIENT == "EFMMM" ? (" - added " + (this.delta).toString()) : "";
 		if (this.fullname.toLowerCase().includes("split"))
 			this.isactive = false;
 	}
@@ -82,7 +82,7 @@ class Quota {
 		if (this.flex > 0) {
 			this.delta = rd((this.flex / 100) * size);
 			this.limit += this.delta;
-			this.fullname += " - Flex " + (this.flex).toString() + "% - added " + (this.delta).toString();
+			this.fullname += " - Flex(" + (this.flex).toString() + "%)" + (CLIENT == "EFMMM" ? (" - added " + (this.delta).toString()) : "";
 		}
 		this.limit = rd(this.limit);
 		this.calculated = true;
